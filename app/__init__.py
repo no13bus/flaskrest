@@ -36,12 +36,11 @@ def auth_func(**kw):
 
 api_manager.create_api(Person,
                    # Allow GET, PATCH, and POST requests.
-                   methods=['GET', 'DELETE', 'PUT'],
+                   methods=['GET', 'DELETE', 'PUT', 'POST'],
                    # Allow PATCH requests modifying the whole collection.
                    allow_patch_many=True,
                    # A list of preprocessors for each method.
-                   preprocessors=dict(GET_SINGLE=[auth_func],
-                                                GET_MANY=[auth_func]),
+                   
                    # A list of postprocessors for each method.
                    postprocessors={
                        'PATCH_MANY': [post_patch_many]

@@ -36,7 +36,6 @@ def logout():
 @auth.get_password
 def get_pw(username):
     user = User.query.filter_by(username=username).first()
-    print user
     if user:
         return user.password
     return None
@@ -54,5 +53,15 @@ def indextt():
 @app.route('/api/v1/test')
 @auth.login_required
 def test():
-    user = User.query.get(1)
-    return jsonify(user=user.username, password=user.password)
+    user = User.query.all()
+    # {for i in user}
+    tmp = []
+    # result = [i.to_dict() for i in user]
+    for x in user:
+        t_dict = {"username":x.username, 'id':x.id, 'password':x.password}
+        tmp.append(t_dict)
+
+    return jsonify({"result":tmp}), 200
+
+
+
