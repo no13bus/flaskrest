@@ -1,7 +1,6 @@
 <!doctype html>
-<html>
+<html ng-app ng-controller="PhoneListCtrl">
     <head>
-        <title>Welcome</title>
         <link rel="stylesheet" href="http://libs.useso.com/js/bootstrap/3.1.0/css/bootstrap.min.css">
         
         <script src="http://libs.useso.com/js/angular.js/1.2.9/angular.min.js"></script>
@@ -13,9 +12,37 @@
 
         <script src="http://libs.useso.com/js/jquery/2.1.1/jquery.min.js"></script>
         <script src="http://libs.useso.com/js/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+        <title>Google {{query||'nothing'}}</title>
     </head>
 
     <body>
-        Welcome
+        <div class="container-fluid">
+          <div class="row-fluid">
+            <div class="span2">
+              <!--Sidebar content-->
+              
+              Search: <input ng-model="query">
+              Sort by:
+            <select ng-model="orderProp">
+              <option value="name">Alphabetical</option>
+              <option value="age">Newest</option>
+            </select>
+
+
+            </div>
+            <div class="span10">
+              <!--Body content-->
+
+              <ul class="phones">
+                <li ng-repeat="phone in phones | filter:query | orderBy:orderProp">
+                  {{phone.name}}
+                <p>{{phone.snippet}}</p>
+                </li>
+              </ul>
+              {{phones | json}}
+
+               </div>
+          </div>
+        </div>
     </body>
 </html>

@@ -1,7 +1,7 @@
 from app import app, login_manager, auth
-from flask import render_template, redirect, url_for, flash, jsonify
+from flask import render_template, redirect, url_for, flash, jsonify, make_response
 from forms import LoginForm
-from models import User
+from models import *
 from flask.ext.login import login_user, login_required, logout_user
 from flask.ext.httpauth import HTTPBasicAuth
 
@@ -13,7 +13,8 @@ def load_user(userid):
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    # return render_template('index.html')
+    return make_response(open('app/templates/index.html').read())
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -40,28 +41,25 @@ def get_pw(username):
         return user.password
     return None
 
-# @auth.hash_password
-# def hash_pw(password):
-#     return md5(password).hexdigest()
+@auth.error_handler
+def unauthorized():
+    return make_response(jsonify({'error': 'Unauthorized access*****'}), 401)
 
 
-@app.route('/tt')
+@app.route('/topic', methods=['GET', 'POST'])
 @auth.login_required
-def indextt():
-    return "Hello, %s!" % auth.username()
-
-@app.route('/api/v1/test')
-@auth.login_required
-def test():
-    user = User.query.all()
-    # {for i in user}
-    tmp = []
-    # result = [i.to_dict() for i in user]
-    for x in user:
-        t_dict = {"username":x.username, 'id':x.id, 'password':x.password}
-        tmp.append(t_dict)
-
+def topic():
+    t = Topic.query.all()
+    tmp = map(lambda x: x.to_dict(), t)
     return jsonify({"result":tmp}), 200
+
+# @app.route('/api/v1/test')
+# @auth.login_required
+# def test():
+#     user = User.query.all()
+#     tmp = map(lambda x: x.to_dict(), user)
+
+#     return jsonify({"result":tmp}), 200
 
 
 

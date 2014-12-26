@@ -12,14 +12,6 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 auth = HTTPBasicAuth()
 
-users1 = {
-    "john": "hello",
-    "susan": "bye"
-}
-
-
-
-
 # Define pre- and postprocessor functions as described below.
 def pre_get_single(**kw): pass
 def pre_get_many(**kw): pass
@@ -27,7 +19,7 @@ def post_patch_many(**kw): pass
 def pre_delete(**kw): pass
 
 
-from models import Person, Computer, User
+from models import *
 api_manager = APIManager(app, flask_sqlalchemy_db=db)
 
 def auth_func(**kw):
@@ -49,6 +41,7 @@ api_manager.create_api(Person,
 
 api_manager.create_api(Computer, methods=['GET', 'POST'])
 api_manager.create_api(User, methods=['GET', 'POST'])
+api_manager.create_api(Topic, methods=['GET', 'POST'])
 
 login_manager = LoginManager()
 login_manager.setup_app(app)

@@ -22,6 +22,23 @@ class Computer(db.Model):
     def to_dict(self):
         pass
 
+class Topic(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Unicode)
+    content = db.Column(db.Unicode)
+    
+    def to_dict(self):
+        res = dict()
+        for c in self.__table__.columns:
+            value = getattr(self, c.name)
+            if isinstance(value, datetime):
+                res[c.name] = value.isoformat()
+            elif isinstance(value, uuid.UUID):
+                res[c.name] = str(value)
+            else:
+                res[c.name] = value
+        return res
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Unicode)
@@ -38,3 +55,6 @@ class User(db.Model, UserMixin):
             else:
                 res[c.name] = value
         return res
+
+
+# /usr/local/lib/python2.7/dist-packages/sqlalchemy/engine/default.py:573: SAWarning: Unicode type received non-unicodebind param value.
